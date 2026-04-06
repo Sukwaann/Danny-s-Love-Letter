@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Jaeden | a confession ✦</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&family=Gaegu:wght@400;700&family=Patrick+Hand&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --chocolate: #6B3F2A;
+            --cream: #F5E8C7;
+            --accent: #D4A017;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f5e8c7 0%, #e8d4b8 100%);
+            color: #3C2F2F;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 69, 19, 0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(245, 232, 199, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #d4bea4;
+            z-index: 1000;
+            padding: 1rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--chocolate); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { font-weight: 500; color: #3C2F2F; text-decoration: none; position: relative; }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0;
+            background: var(--accent); transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .hamburger { display: none; font-size: 1.8rem; background: none; border: none; color: var(--chocolate); cursor: pointer; }
+
+        /* Mobile Sidebar */
+        .sidebar {
+            position: fixed; top: 0; right: -320px; width: 280px; height: 100vh;
+            background: #f5e8c7; box-shadow: -8px 0 25px rgba(107,63,42,0.15);
+            z-index: 1200; transition: right 0.4s cubic-bezier(0.32,0.72,0,1); padding: 5rem 2rem 2rem;
+        }
+        .sidebar.open { right: 0; }
+        .sidebar a { display: block; padding: 1rem 0; font-size: 1.25rem; color: #3C2F2F; text-decoration: none; border-bottom: 1px solid #d4bea4; }
+        .sidebar a:hover { padding-left: 10px; color: var(--chocolate); }
+        .close-sidebar { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 2rem; background: none; border: none; color: var(--chocolate); cursor: pointer; }
+        .overlay { position: fixed; inset: 0; background: rgba(60,47,47,0.4); z-index: 1100; opacity: 0; visibility: hidden; transition: all 0.4s; }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 100px 20px 80px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .stamp { 
+            width: 110px; 
+            height: 110px; 
+            background: #fff; 
+            border: 4px dashed var(--chocolate); 
+            border-radius: 50%; 
+            margin: 0 auto 1.5rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 8px 20px rgba(107,63,42,0.1); 
+            transform: rotate(-3deg); 
+        }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; color: var(--chocolate); text-align: center; }
+        
+        /* CUTE PLAYFUL TYPOGRAPHY for typing wrapper */
+        .typing-wrapper { 
+            font-family: 'Patrick Hand', 'Quicksand', 'Gaegu', cursive; 
+            font-size: 1.5rem; 
+            font-weight: 600;
+            color: #8B5A3C; 
+            margin: 1rem auto; 
+            display: inline-block; 
+            padding: 10px 28px; 
+            background: rgba(255,250,235,0.85); 
+            border-radius: 60px; 
+            box-shadow: 0 6px 14px rgba(107,63,42,0.12);
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(2px);
+        }
+        #typed-text {
+            font-family: 'Patrick Hand', 'Quicksand', 'Gaegu', cursive;
+            font-weight: 600;
+        }
+        .cursor { 
+            animation: blink 0.8s infinite; 
+            font-weight: 600;
+            font-size: 1.6rem;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Confession Card */
+        .confession-card {
+            background: #fffef9;
+            border-radius: 18px;
+            padding: 2.8rem 3.2rem;
+            box-shadow: 0 15px 35px rgba(107,63,42,0.12);
+            margin-bottom: 3rem;
+            position: relative;
+            border: 2px solid #e8d9c0;
+            background-image: 
+                linear-gradient(#f9f0e0 1px, transparent 1px),
+                linear-gradient(90deg, #f9f0e0 1px, transparent 1px);
+            background-size: 24px 24px;
+            overflow: visible;
+        }
+
+        /* Long curly brace on left */
+        .confession-card::before {
+            content: '{';
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 7.2rem;
+            font-family: 'Playfair Display', serif;
+            color: #d4bea4;
+            opacity: 0.18;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Shared sticky note styling */
+        .sticker-note {
+            position: absolute;
+            border: 3px solid rgba(245, 232, 199, 0.9);
+            background: rgba(255, 252, 240, 0.96);
+            box-shadow: 6px 8px 18px rgba(107, 63, 42, 0.22);
+            border-radius: 10px;
+            transition: transform 0.2s ease, filter 0.2s;
+            z-index: 28;
+            pointer-events: none;
+            object-fit: cover;
+            backdrop-filter: blur(1px);
+        }
+        
+        .sticker-note:hover {
+            transform: scale(1.03) rotate(var(--rot, 0deg));
+            filter: brightness(1.02);
+        }
+
+        /* Original 4 corner sticky notes (larger, on the actual corners) */
+        .corner-sticker {
+            position: absolute;
+            border: 3px solid #f5e8c7;
+            background: rgba(255, 248, 235, 0.95);
+            box-shadow: 6px 8px 16px rgba(107, 63, 42, 0.25);
+            border-radius: 6px;
+            transition: transform 0.2s ease;
+            z-index: 25;
+            pointer-events: none;
+            object-fit: cover;
+        }
+        .corner-sticker:hover {
+            transform: scale(1.02) rotate(var(--rot, 0deg));
+        }
+
+        .corner-top-left {
+            top: -28px;
+            left: -28px;
+            width: 100px;
+            transform: rotate(-12deg);
+            --rot: -12deg;
+        }
+        .corner-top-right {
+            top: -28px;
+            right: -28px;
+            width: 100px;
+            transform: rotate(10deg);
+            --rot: 10deg;
+        }
+        .corner-bottom-left {
+            bottom: -32px;
+            left: -32px;
+            width: 120px;
+            transform: rotate(-8deg);
+            --rot: -8deg;
+        }
+        .corner-bottom-right {
+            bottom: -30px;
+            right: -30px;
+            width: 115px;
+            transform: rotate(14deg);
+            --rot: 14deg;
+        }
+
+        /* Small scattered sticky notes (base style) */
+        .scatter-sticker {
+            width: 68px;
+            border-radius: 12px;
+            border: 2px solid #f5e2c0;
+            background: #fffef5;
+            box-shadow: 5px 7px 14px rgba(90, 50, 30, 0.2);
+        }
+
+        /* Existing placements */
+        .scatter-1 { top: 12%; left: -45px; transform: rotate(-18deg); --rot: -18deg; }
+        .scatter-2 { bottom: 22%; right: -48px; transform: rotate(12deg); --rot: 12deg; }
+        .scatter-3 { top: 68%; left: -40px; transform: rotate(6deg); --rot: 6deg; }
+        .scatter-4 { top: 30%; right: -50px; transform: rotate(-8deg); --rot: -8deg; width: 64px; }
+        .scatter-5 { bottom: 45%; left: -44px; transform: rotate(15deg); --rot: 15deg; width: 66px; }
+        .scatter-6 { top: 82%; right: -42px; transform: rotate(-5deg); --rot: -5deg; width: 62px; }
+        .scatter-7 { top: 48%; right: -48px; transform: rotate(22deg); --rot: 22deg; width: 60px; }
+        .scatter-8 { bottom: 68%; left: -42px; transform: rotate(-14deg); --rot: -14deg; width: 64px; }
+        .scatter-9 { top: 18%; right: -44px; transform: rotate(8deg); --rot: 8deg; width: 62px; }
+
+        /* Responsive adjustment */
+        @media (max-width: 780px) {
+            .scatter-1, .scatter-3, .scatter-5, .scatter-8 { left: -32px; width: 56px; }
+            .scatter-2, .scatter-4, .scatter-6, .scatter-7, .scatter-9 { right: -34px; width: 56px; }
+            .scatter-1 { top: 10%; }
+            .scatter-2 { bottom: 20%; }
+            .scatter-3 { top: 65%; }
+            .scatter-4 { top: 28%; }
+            .scatter-5 { bottom: 42%; }
+            .scatter-6 { top: 80%; }
+            .scatter-7 { top: 48%; }
+            .scatter-8 { bottom: 68%; left: -32px; }
+            .scatter-9 { top: 18%; }
+            .corner-top-left, .corner-top-right { width: 75px; top: -20px; }
+            .corner-bottom-left, .corner-bottom-right { width: 88px; }
+            .corner-top-left { left: -20px; }
+            .corner-top-right { right: -20px; }
+            .corner-bottom-left { left: -24px; bottom: -24px; }
+            .corner-bottom-right { right: -24px; bottom: -22px; }
+            .confession-card { padding: 2rem 1.5rem; }
+            .confession-text { padding-left: 32px; }
+        }
+
+        @media (max-width: 600px) {
+            .scatter-1, .scatter-3, .scatter-5, .scatter-8 { left: -22px; width: 48px; }
+            .scatter-2, .scatter-4, .scatter-6, .scatter-7, .scatter-9 { right: -24px; width: 48px; }
+        }
+
+        .confession-text {
+            font-family: 'Gaegu', cursive;
+            font-size: 1.15rem;
+            line-height: 1.92;
+            color: #3C2F2F;
+            white-space: pre-line;
+            position: relative;
+            z-index: 2;
+            padding-left: 48px;
+        }
+
+        .action-buttons {
+            display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2.8rem;
+        }
+        .btn {
+            padding: 14px 42px; font-size: 1.25rem; font-weight: 600;
+            border: 3px solid var(--chocolate); background: #fff; color: var(--chocolate);
+            border-radius: 50px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .btn:hover { background: var(--chocolate); color: #fff; transform: translateY(-3px); }
+
+        /* Photobooth */
+        .photobooth-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 30px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #d4bea4 #f5e8c7;
+        }
+        .photobooth {
+            display: flex;
+            gap: 2.2rem;
+            width: max-content;
+        }
+        .photo-wrapper {
+            position: relative;
+            width: 240px;
+            flex-shrink: 0;
+        }
+        .photo-card {
+            background: #fff;
+            padding: 12px;
+            box-shadow: 8px 10px 20px rgba(107,63,42,0.15);
+            transform: rotate(var(--rot));
+        }
+        .photo-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border: 8px solid #f5e8c7;
+        }
+
+        .photo-corner {
+            position: absolute;
+            width: 62px;
+            border: 3px solid #f5e8c7;
+            box-shadow: 3px 3px 8px rgba(107,63,42,0.25);
+            z-index: 12;
+        }
+        .photo-corner-top-right {
+            top: -16px;
+            right: -16px;
+            transform: rotate(20deg);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #6B3F2A;
+            font-size: 1.8rem;
+        }
+
+        footer { text-align: center; padding: 3rem 0; color: #8B6B4A; font-size: 0.95rem; font-family: 'Inter', sans-serif; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; }
+            .container { padding-top: 90px; }
+            h1 { font-size: 2.6rem; }
+            .confession-text { padding-left: 28px; }
+            .typing-wrapper { font-size: 1.2rem; padding: 6px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">✦ Jaeden ✦</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#letter">Letter</a></li>
+            <li><a href="#photobooth">Photobooth</a></li>
+        </ul>
+        <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+    </nav>
+
+    <!-- Mobile Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-sidebar" id="closeSidebarBtn"><i class="fas fa-times"></i></button>
+        <a href="#home">Home</a>
+        <a href="#letter">The Letter</a>
+        <a href="#photobooth">Photobooth</a>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="container">
+
+        <!-- Intro -->
+        <section id="home" data-aos="fade-up">
+            <div class="intro">
+                <div class="stamp">
+                    <i class="fas fa-heart" style="font-size: 3.2rem; color: #D4A017;"></i>
+                </div>
+                <h1>dear jaeden,</h1>
+                <div class="typing-wrapper">
+                    <span id="typed-text"></span><span class="cursor">|</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decorated Confession Box WITH sticky notes -->
+        <section id="letter" data-aos="fade-up">
+            <div class="confession-card">
+                <!-- 4 Corner Images -->
+                <img src="https://files.catbox.moe/zveve2.jpg" class="corner-sticker corner-top-left" alt="sticker">
+                <img src="https://files.catbox.moe/lgvrtv.jpg" class="corner-sticker corner-top-right" alt="sticker">
+                <img src="https://files.catbox.moe/00wvk8.jpg" class="corner-sticker corner-bottom-left" alt="sticker">
+                <img src="https://files.catbox.moe/kultgl.jpg" class="corner-sticker corner-bottom-right" alt="sticker">
+
+                <!-- All scattered sticky notes (9 images total) -->
+                <img src="https://files.catbox.moe/o0eaz8.jpg" class="sticker-note scatter-sticker scatter-1" alt="cute sticky">
+                <img src="https://files.catbox.moe/8vx7bq.jpg" class="sticker-note scatter-sticker scatter-2" alt="cute sticky">
+                <img src="https://files.catbox.moe/5zbjzn.jpg" class="sticker-note scatter-sticker scatter-3" alt="cute sticky">
+                <img src="https://files.catbox.moe/6p28bt.jpg" class="sticker-note scatter-sticker scatter-4" alt="extra sticker">
+                <img src="https://files.catbox.moe/j28hag.jpg" class="sticker-note scatter-sticker scatter-5" alt="extra sticker">
+                <img src="https://files.catbox.moe/fbxiac.jpg" class="sticker-note scatter-sticker scatter-6" alt="extra sticker">
+                <img src="https://files.catbox.moe/y50a92.png" class="sticker-note scatter-sticker scatter-7" alt="new sticker">
+                <img src="https://files.catbox.moe/2kwlu8.png" class="sticker-note scatter-sticker scatter-8" alt="new sticker">
+                <img src="https://files.catbox.moe/bxx01g.png" class="sticker-note scatter-sticker scatter-9" alt="new sticker">
+
+                <div class="confession-text">
+                    from the moment i been cruel to you when u asking me to buy you an ice cream i already falling for you<br>
+                    and after those i already start admiring you from afar and keep approach you cause i wanna try to just "friend"<br>
+                    but after i realized im falling for you i start have this feeling that i dont accept other girl that confess to me cause somehow im still looking the girl that have personality like you<br>
+                    its complicated but i just saying that youre just special in my eye but as yk i am so underated when compare to "jai/husna/belalang/j"<br>
+                    but yea even u know what happent at school when i saw you or even think bout ya<br>
+                    but yea theres always been drama bout im jealous of you choosing zak and tryna just let you go like you are mine and i found that lowk ego thinggy of me sorry<br>
+                    but yea really wish you would accept me even thought im just dany or whatever people talked bout me<br>
+                    but i wont force you at least i can move on that knowing u actually have reason for not be with me<br>
+                    tbh from the accident that we talked bout partner thinggy at kfc like "why you dont find girl danny?" i tryna say something sweet or smtgh but im too shy and goofy at the time cause im nervouse talking to you<br>
+                    so heres the real awnser, i want you because of you being you and all the decision that you've made in your life and i soo thankfull that u actually gonna make the new decision of being with me :3
+                </div>
+
+                <div style="text-align:center; margin-top: 2.5rem; font-size:1.2rem; color:#6B3F2A; font-family: 'Patrick Hand', cursive; font-weight: 500;">
+                    would you like to be with me? ✨
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="acceptBtn"><i class="fas fa-heart"></i> Accept</button>
+                    <button class="btn" id="declineBtn"><i class="fas fa-hand-holding-heart"></i> Decline</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photobooth - includes original 3 images + 5 new ones (total 8) -->
+        <section id="photobooth" data-aos="fade-up">
+            <h2 class="section-title">✦ our photobooth ✦</h2>
+            <div class="photobooth-container">
+                <div class="photobooth" id="photoboothGallery"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>a chocolate-coated confession made with love</footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+
+        // Typing Effect
+        const phrases = ["💌 i've been collecting these feelings for you...", "🍫 a little messy, but completely honest", "🌟 from my heart to yours", "🌸 you make my world sweeter"];
+        let i = 0, j = 0, isDeleting = false;
+        const typedText = document.getElementById("typed-text");
+        function type() {
+            const current = phrases[i];
+            if (isDeleting) { typedText.textContent = current.substring(0, j-1); j--; }
+            else { typedText.textContent = current.substring(0, j+1); j++; }
+            if (!isDeleting && j === current.length) { isDeleting = true; setTimeout(type, 1500); return; }
+            if (isDeleting && j === 0) { isDeleting = false; i = (i + 1) % phrases.length; }
+            setTimeout(type, isDeleting ? 40 : 70);
+        }
+        type();
+
+        // Sidebar
+        const hamburger = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.getElementById('closeSidebarBtn');
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+        hamburger.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) { e.preventDefault(); closeSidebar(); target.scrollIntoView({ behavior: 'smooth' }); }
+            });
+        });
+
+        // Photobooth: Combine original 3 images + 5 new images (total 8)
+        // Original 3 main images with their original corner stickers
+        const originalMainPhotos = [
+            "https://files.catbox.moe/dkcy3g.jpg",
+            "https://files.catbox.moe/ps6n2y.jpg",
+            "https://files.catbox.moe/re9em0.jpg"
+        ];
+        const originalCornerImages = [
+            "https://files.catbox.moe/x8e3ii.jpg",
+            "https://files.catbox.moe/krx28o.jpg",
+            "https://files.catbox.moe/khk5tp.jpg"
+        ];
+        
+        // New 5 main images with UPDATED corner stickers (as requested)
+        const newMainPhotos = [
+            "https://files.catbox.moe/1ecbcl.jpg",
+            "https://files.catbox.moe/ls9o84.jpg",
+            "https://files.catbox.moe/qpwvvo.png",
+            "https://files.catbox.moe/t6cu5c.jpg",
+            "https://files.catbox.moe/rwc5jd.jpg"
+        ];
+        const newCornerImages = [
+            "https://files.catbox.moe/fbxiac.jpg",
+            "https://files.catbox.moe/atffz2.jpg",
+            "https://files.catbox.moe/ibvh9z.jpg",
+            "https://files.catbox.moe/fvw5tb.jpg",
+            "https://files.catbox.moe/ctxoj3.jpg"
+        ];
+        
+        // Combine arrays
+        const allMainPhotos = [...originalMainPhotos, ...newMainPhotos];
+        const allCornerImages = [...originalCornerImages, ...newCornerImages];
+        
+        // Rotation angles for variety (8 different rotations)
+        const rotations = ['-4deg', '2deg', '5deg', '-2deg', '3deg', '-3deg', '4deg', '1deg'];
+        
+        const photoboothGallery = document.getElementById('photoboothGallery');
+        photoboothGallery.innerHTML = '';
+        
+        allMainPhotos.forEach((mainUrl, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'photo-wrapper';
+            wrapper.style.setProperty('--rot', rotations[index % rotations.length]);
+            
+            wrapper.innerHTML = `
+                <div class="photo-card">
+                    <img src="${mainUrl}" alt="photobooth memory">
+                </div>
+                <img src="${allCornerImages[index]}" class="photo-corner photo-corner-top-right" alt="corner sticker">
+            `;
+            
+            photoboothGallery.appendChild(wrapper);
+        });
+
+        // Accept / Decline response popups
+        function showResponse(isAccept) {
+            const win = window.open("", "_blank", "width=560,height=520");
+            win.document.write(isAccept ? `
+                <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Yes ❤️</title>
+                <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+                <style>body{background:linear-gradient(#f5e8c7,#e8d4b8);font-family:'Patrick Hand',cursive;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:20px;}
+                .card{background:#fff;padding:2.5rem;border-radius:30px;max-width:460px;text-align:center;box-shadow:0 25px 45px rgba(107,63,42,0.2);border:2px solid #f0dbb4;}
+                h1{font-size:2.8rem;color:#6B3F2A;font-family:'Playfair Display',serif;margin:0.5rem 0;}
+                p{font-size:1.35rem;line-height:1.6;color:#3C2F2F;margin:1rem 0;}
+                i{font-size:4rem;color:#D4A017;margin-bottom:0.5rem;display:inline-block;}
+                button{font-family:'Patrick Hand',cursive;margin-top:1.8rem;padding:12px 32px;background:#6B3F2A;color:#fff;border:none;border-radius:50px;cursor:pointer;font-size:1.2rem;transition:0.2s;}
+                button:hover{background:#8B5A3C;transform:scale(1.02);}</style></head>
+                <body><div class="card"><i class="fas fa-heart"></i><h1>you said yes...</h1>
+                <p>i can't believe it... you feel the same way?<br>i'm the happiest guy right now.<br>let's make every day as sweet as chocolate together ✨</p>
+                <button onclick="window.close()">close window →</button></div></body></html>
+            ` : `
+                <!DOCTYPE html><html><head><meta charset="UTF-8"><title>I understand</title>
+                <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+                <style>body{background:linear-gradient(#f5e8c7,#e8d4b8);font-family:'Patrick Hand',cursive;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:20px;}
+                .card{background:#fff;padding:2.5rem;border-radius:30px;max-width:460px;text-align:center;box-shadow:0 25px 45px rgba(107,63,42,0.2);border:2px solid #f0dbb4;}
+                h1{font-size:2.5rem;color:#6B3F2A;font-family:'Playfair Display',serif;}
+                p{font-size:1.35rem;line-height:1.6;color:#3C2F2F;}
+                i{font-size:4rem;color:#B48C5C;margin-bottom:0.5rem;}
+                button{font-family:'Patrick Hand',cursive;margin-top:1.8rem;padding:12px 32px;background:#6B3F2A;color:#fff;border:none;border-radius:50px;cursor:pointer;font-size:1.2rem;transition:0.2s;}
+                button:hover{background:#8B5A3C;}</style></head>
+                <body><div class="card"><i class="fas fa-hand-holding-heart"></i><h1>i understand...</h1>
+                <p>i really respect your decision.<br>i wish you nothing but happiness, always.<br>thank you for being you 🌷</p>
+                <button onclick="window.close()">close window →</button></div></body></html>
+            `);
+        }
+
+        document.getElementById('acceptBtn').addEventListener('click', () => showResponse(true));
+        document.getElementById('declineBtn').addEventListener('click', () => showResponse(false));
+    </script>
+</body>
+</html>
